@@ -52,7 +52,12 @@ def fetch_todos():
     response_model=TodoCreateOut | BaseOut
 )
 
-def fetchTodos_by_id(user_id:UUID) -> TodoCreateOut | BaseOut:
+def fetchTodos_by_id(user_id:str) -> TodoCreateOut | BaseOut:
+    try:
+        user_id=UUID(user_id)
+    except Exception as ex:
+        return BaseOut(msg="Invalied uuid",error=str(ex))
+    
     for todo in db:
         if todo.id==user_id:
             return TodoCreateOut(todo=todo,msg=f"todo is fetched for id {user_id}")
