@@ -62,4 +62,41 @@ def fetchTodos_by_id(user_id:str) -> TodoCreateOut | BaseOut:
         if todo.id==user_id:
             return TodoCreateOut(todo=todo,msg=f"todo is fetched for id {user_id}")
     return BaseOut(msg="no to do found::")
+
+# updating the name of a todoapp
+@app.put(
+    "/update_name/{user_id}",
+    response_model= TodoCreateOut
+    )
+
+class UpdateName(BaseModel):
+    name: str
+
+
+# updating yo do as peer the username
+@app.put("/todo/{user_id}")
+def update_name(user_id: str, updatePost: UpdateName):
+
+    try:
+        user_id = UUID(user_id)
+
+    except Exception as ex:
+        return BaseOut(
+            msg="Invalid uuid",
+            error=str(ex)
+        )
+
+    for todo in db:
+
+        if todo.id == user_id:
+
+            todo.name = updatePost.name
+
+            return TodoCreateOut(
+                todo=todo,
+                msg="name has been updated successfully"
+            )
+
+    return BaseOut(msg="no todo found::")
+
     
