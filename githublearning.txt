@@ -1,0 +1,13 @@
+learning 1
+--jhukara __pycache__ lai pani push garna add handa aaba teslai kasari staging layer bata hatauna
+git rm -r --cached __pycache__
+
+
+learning 2
+When you change something directly on GitHub or another branch gets merged into main, your local repository becomes outdated compared to the remote repository. Before pushing your own code, you should run git pull origin main to synchronize your local history with GitHub. Pulling downloads the latest commits and merges them into your local branch. After pulling, you can review the incoming changes using git diff, inspect commit history with git log --oneline, or check a specific commit using git show COMMIT_ID. If some pulled changes are not good, the safest way to undo them is git revert COMMIT_ID, which creates a new commit that reverses the bad changes without destroying history. This workflow helps maintain a clean and synchronized project history, especially in team development.
+
+git show commit_id,, yo command la k chai yo commit ma code chnage vako xa vanara dinxa
+
+git log --oneline,, this command show the commit history
+
+git log.. yo commad la kun bela commit garako vanara pani info dinxa.. quite handy
