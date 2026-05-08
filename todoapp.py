@@ -123,4 +123,26 @@ def delete_todo(user_id:str) -> BaseOut:
 
 
 
+# getting the todo as per the category using a query parameter
+
+@app.get(
+    "/category",
+    response_model=TodoGetOut | BaseOut
+    )
+
+def get_todos_as_per_catgory(category:str) -> TodoGetOut | BaseOut:
+    todos:list[Todo]=[]
+    for todo in db:
+        if todo.category==category:
+            todos.append(todo)
+
+    if not todos:
+        return BaseOut(msg=f"no any todo found with the category {category}")
+
+    return TodoGetOut(todos=todos,msg="todo fetched successfuly")
+
+
+
+
+
 
