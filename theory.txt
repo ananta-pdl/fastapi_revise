@@ -1,5 +1,0 @@
-hamila route haru ko concept apirouter vanna class ma router haru la organize garna milxa
-
-*******
-
-to_do_app/routers/what_init_filedoes.txt //// see this fille to undestand the use of __init__

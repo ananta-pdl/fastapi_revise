@@ -1,0 +1,18 @@
+In FastAPI, a state variable (app.state) is a built-in mechanism that allows you to store and share data globally across your entire application (0:12 - 0:49).
+
+Why use it?
+Normally, when an API request is processed, the variables inside that function are created and destroyed once the response is sent (0:20 - 0:37). If you need data (like a database connection, a Redis client, or a request counter) to persist throughout the entire lifecycle of your application and be accessible across different routes, app.state acts as a central dictionary to hold that information (0:42 - 0:56, 3:03 - 3:25).
+
+Key Features and Usage:
+Global Access: Since app.state is attached to your FastAPI instance, you can initialize it in one place and access it in others, such as middleware or specific route handlers (2:39 - 3:27, 7:28 - 7:54).
+Accessing in Routes: If you are in a separate file (like a router) and don't have direct access to the app object, you can access the state through the Request object provided by FastAPI: request.app.state.variable_name (4:12 - 5:29, 6:01 - 6:23).
+Best Practices: It is the standard and safe way to manage shared resources like database instances or cache clients, rather than using global variables which can lead to import issues or code structure problems (2:39 - 2:56, 8:12 - 8:23).
+Using app.state ensures your application remains organized and allows your services to share state safely across different parts of the code (6:47 - 7:27).
+
+
+why noy use global?
+The video explains that while using global variables (like global request_count) might seem like a simple solution for tracking data across an application, it is not recommended for several reasons (1:46 - 2:39):
+
+Scoping and Access Issues: Global variables defined in a middleware cannot be easily accessed inside specific route handlers (like a todo router) without complicated restructuring of your application (2:24 - 2:39).
+Structural Problems: Trying to pass the app instance manually into different routes or files often leads to circular import issues, which can break your application (2:49 - 2:56).
+Maintainability and Safety: Using app.state is the standard, safe, and clean way to manage shared resources. It allows you to store and access global objects—such as database connections, cache clients (like Redis), or shared states—in a way that is structured and easily accessible throughout your entire FastAPI project (6:47 - 7:27, 8:12 - 8:23).

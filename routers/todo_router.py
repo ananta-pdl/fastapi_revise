@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Response
+from fastapi import APIRouter,Response,Request
 from uuid import UUID,  uuid4
 from pydantic import BaseModel, Field
 
@@ -22,14 +22,15 @@ db: list[Todo] =[]
 
 class TodoCreateOut(BaseOut):
     todo : Todo
+    api_counter:int
 
 @todo_router.post(
     "/create",
     response_model=TodoCreateOut
 )
-def create_todo(todo:Todo) ->TodoCreateOut:
+def create_todo(todo:Todo, request:Request) ->TodoCreateOut:
     db.append(todo)
-    return TodoCreateOut(todo=todo,msg="successfully created::")
+    return TodoCreateOut(todo=todo,msg="successfully created::",api_counter=request.app.state.api_counter)
 
 class TodoGetOut(BaseOut):
     todos: list[Todo]
@@ -136,6 +137,6 @@ def get_todos_as_per_catgory(category:str) -> TodoGetOut | BaseOut:
             todos.append(todo)
 
     if not todos:
-        return BaseOut(msg=f"no any todo found with the category {category}")
+        return Response(content=BaseOut(msg=f"no any todo found with the category {category}").model_dump(),status_code=404)
 
-    return TodoGetOut(todos=todos,msg="todo fetched successfuly")
+    return Response(content=TodoGetOut(todos=todos,msg="todo fetched successfuly").model_dump(),status_code=200)

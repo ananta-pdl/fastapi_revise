@@ -5,6 +5,8 @@ import json
 
 app=FastAPI()
 
+app.state.api_counter=0
+
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
         print(request['path'])
@@ -13,6 +15,7 @@ async def add_process_time_header(request: Request, call_next):
         if payload:
               print(json.loads(payload))
         start_time = perf_counter()
+        app.state.api_counter+=1
         response = await call_next(request)
         process_time = perf_counter()
         print(start_time-process_time)
