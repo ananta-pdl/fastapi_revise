@@ -1,0 +1,227 @@
+Creating the limiter object
+limiter = Limiter(key_func=get_remote_address)
+What is Limiter?
+
+Limiter is the main object from slowapi that:
+
+tracks requests
+stores request history
+checks rate limits
+blocks excessive requests
+What is key_func=get_remote_address?
+
+This tells SlowAPI:
+
+“Identify users by their IP address.”
+
+Example:
+
+If these requests come:
+
+192.168.1.10  -> request 1
+192.168.1.10  -> request 2
+192.168.1.10  -> request 3
+
+SlowAPI knows all belong to same client.
+
+Internally
+
+SlowAPI stores something like:
+
+{
+    "192.168.1.10": {
+        "count": 2,
+        "time_window": "1 minute"
+    }
+}
+
+So when request count exceeds limit:
+
+@limiter.limit("2/minute")
+
+it raises:
+
+RateLimitExceeded
+2. Saving limiter in app state
+app.state.limiter = limiter
+What is app.state?
+
+state is a place to store global shared objects.
+
+You can store:
+
+database connection
+cache client
+limiter
+counters
+configs
+Why store limiter there?
+
+Because middleware and routes may need access to same limiter object.
+
+Now anywhere:
+
+request.app.state.limiter
+
+gives access to same limiter.
+
+Think of it like:
+app.state.db
+app.state.cache
+app.state.redis
+app.state.limiter
+
+shared application-level memory.
+
+3. Adding middleware
+app.add_middleware(SlowAPIMiddleware)
+What is middleware?
+
+Middleware runs:
+
+BEFORE request reaches endpoint
+AFTER endpoint returns response
+
+Request flow:
+
+Client Request
+      ↓
+Middleware
+      ↓
+Route Function
+      ↓
+Middleware
+      ↓
+Response
+What does SlowAPIMiddleware do?
+
+It intercepts every request and:
+
+checks limits
+updates counters
+injects headers
+handles rate limit tracking
+
+Without middleware:
+
+rate limiting may not function properly
+request tracking can break
+Example
+
+User hits endpoint:
+
+POST /todo/create
+
+Middleware checks:
+
+Has this IP exceeded 2 requests/minute?
+
+If NO:
+
+request continues
+
+If YES:
+
+raises RateLimitExceeded
+4. Adding exception handler
+app.add_exception_handler(
+    RateLimitExceeded,
+    lambda request, exc: JSONResponse(
+        status_code=429,
+        content={"message": "too many requests"}
+    )
+)
+What is exception handler?
+
+It catches specific exceptions and returns custom responses.
+
+Without this:
+
+FastAPI returns ugly default error.
+
+With this:
+
+you control the output.
+
+What happens internally?
+
+When user exceeds limit:
+
+@limiter.limit("2/minute")
+
+SlowAPI raises:
+
+RateLimitExceeded
+
+FastAPI sees:
+
+"Oh, there is a handler for this exception."
+
+Then executes:
+
+lambda request, exc: JSONResponse(...)
+Why status code 429?
+status_code=429
+
+HTTP 429 means:
+
+Too Many Requests
+
+This is the standard HTTP status code for rate limiting.
+
+Why content is dictionary?
+content={"message": "too many requests"}
+
+FastAPI converts this to JSON:
+
+{
+    "message": "too many requests"
+}
+Full Request Lifecycle
+Client Request
+      ↓
+SlowAPIMiddleware checks IP
+      ↓
+Limiter checks request count
+      ↓
+If limit exceeded:
+      ↓
+Raise RateLimitExceeded
+      ↓
+Exception handler catches it
+      ↓
+Returns HTTP 429 JSON response
+Overall Architecture
+Limiter
+   ↓
+Tracks IP requests
+
+Middleware
+   ↓
+Intercepts all requests
+
+Decorator
+   ↓
+Defines route limits
+
+Exception Handler
+   ↓
+Returns clean error response
+Example
+@limiter.limit("2/minute")
+
+User requests:
+
+Request 1 → success
+Request 2 → success
+Request 3 → blocked
+
+Response:
+
+{
+    "message": "too many requests"
+}
+
+Status:
+
+429 Too Many Requests
