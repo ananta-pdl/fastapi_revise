@@ -26,6 +26,15 @@ app.add_exception_handler(
 
 app.add_middleware(SlowAPIMiddleware)
 
+# adding a async decorator ratelimitexcedded
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request :Request, exe: RateLimitExceeded):
+      return JSONResponse(
+            status_code=429,
+            content={"message":"too many request"}
+      )
+
 app.state.api_counter=0
 
 @app.middleware("http")
