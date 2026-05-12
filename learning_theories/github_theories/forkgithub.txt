@@ -1,0 +1,114 @@
+Simple GitHub Contribution Summary
+Important Terms
+Term	Meaning
+Repository (Repo)	Project/code folder on GitHub
+Fork	Your personal copy of someone else's repo
+Clone	Download repo from GitHub to your computer
+Branch	Separate workspace for changes
+Commit	Save/checkpoint of changes
+Push	Upload local changes to GitHub
+Pull Request (PR)	Request to merge your changes into original repo
+Origin	Your fork repo
+Upstream	Original repo
+Full Workflow
+1. Fork the Repo
+
+On GitHub:
+
+Open repo
+Click Fork
+
+Creates:
+
+Original Repo → Your Fork
+2. Clone Your Fork
+
+Click green Code button → copy URL.
+
+git clone <your-fork-url>
+
+Move inside project:
+
+cd repo-name
+3. Open in VS Code
+code .
+4. Create Branch
+git checkout -b feature-name
+
+Example:
+
+git checkout -b fix-login
+5. Edit Code
+
+Make your changes.
+
+6. Check Changes
+git status
+7. Add Files
+git add .
+8. Commit Changes
+git commit -m "Fixed login bug"
+9. Push to GitHub
+git push origin fix-login
+10. Create Pull Request
+
+Go to GitHub.
+
+Click:
+
+Compare & pull request
+
+Then:
+
+explain changes
+create PR
+Sync Fork With Original Repo
+
+If original repo has new commits:
+
+On GitHub:
+
+Click Sync fork
+Click Update branch
+
+Or terminal:
+
+git pull upstream main
+git push origin main
+Overall Flow
+Original Repo
+      ↓ Fork
+Your Fork
+      ↓ Clone
+Your Computer
+      ↓ Edit
+Branch
+      ↓ Commit
+Push
+      ↓
+Pull Request
+      ↓
+Original Repo
+Most Important Commands
+git clone <url>
+
+cd repo-name
+
+git checkout -b new-branch
+
+git add .
+
+git commit -m "message"
+
+git push origin branch-name
+Golden Rules
+Never work directly on main
+Always create a new branch
+Pull latest changes before working
+Write meaningful commit messages
+Small PRs are easier to review
+Real Meaning of Git vs GitHub
+Git	GitHub
+Version control tool	Website hosting Git repos
+Tracks code history	Stores repos online
+Works locally	Works on cloud
