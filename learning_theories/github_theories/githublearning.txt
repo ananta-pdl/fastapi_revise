@@ -11,3 +11,4 @@ git show commit_id,, yo command la k chai yo commit ma code chnage vako xa vanar
 git log --oneline,, this command show the commit history
 
 git log.. yo commad la kun bela commit garako vanara pani info dinxa.. quite handy
+

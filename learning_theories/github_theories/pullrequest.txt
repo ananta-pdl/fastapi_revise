@@ -1,0 +1,125 @@
+🧠 Git + GitHub + PR Workflow (Simple Master Summary)
+1. 🧾 Git (local tool)
+
+Git is used to track your code on your computer.
+
+You use it for:
+
+saving changes (commit)
+sending code to GitHub (push)
+switching branches (checkout)
+updating code (pull)
+
+Example flow:
+
+git add .
+git commit -m "message"
+git push origin branch-name
+2. ☁️ GitHub (online storage + collaboration)
+
+GitHub is where your code lives online.
+
+It allows:
+
+storing repositories
+collaboration
+Pull Requests (PR)
+code review
+3. 🔀 Fork + Branch workflow (what you did)
+
+You worked like this:
+
+Forked repo → your copy of project
+Created branch (ananta or fix-api-routes)
+Made changes
+
+Pushed code:
+
+git push origin ananta
+4. 📩 Pull Request (PR)
+
+A PR is:
+
+“Hey owner, please take my changes and merge them into your project”
+
+You created it using:
+
+GitHub website OR
+GitHub CLI (gh)
+5. ⚡ GitHub CLI (gh)
+
+GitHub CLI lets you manage GitHub from terminal:
+
+Used for:
+
+creating PRs
+listing PRs
+viewing issues
+
+Example:
+
+gh pr create
+gh pr list
+6. ⚠️ What is a Merge Conflict?
+
+A conflict happens when:
+
+Two branches change the same file/line differently
+
+Example:
+
+main: "Hello World"
+your branch: "Hello User"
+
+Git doesn’t know which one to choose.
+
+7. 🛠️ How conflicts are fixed
+
+Steps:
+
+git fetch origin
+git merge origin/main
+
+Then:
+
+open file
+remove conflict markers (<<<<<<, ======, >>>>>>)
+choose correct code
+commit again
+git add .
+git commit -m "resolve conflict"
+git push origin branch
+8. 🔁 Full real workflow (what you learned)
+1. git checkout -b feature-branch
+2. make changes
+3. git add .
+4. git commit -m "work"
+5. git push origin feature-branch
+6. create PR (gh or GitHub website)
+7. owner reviews
+8. owner merges
+🧭 Key Mental Model
+
+Think like this:
+
+Git → your local notebook 📝
+GitHub → cloud storage ☁️
+PR → request to merge your notebook pages into main book 📖
+Conflict → two people edited same sentence ✍️✍️
+💡 Your current status (important)
+
+You already achieved:
+
+✔ repo forked
+✔ branch created
+✔ code pushed
+✔ PR created
+✔ owner can see it
+
+👉 Now only step left is: owner merge
+
+🚀 If you remember only 1 line:
+
+“Git saves code, GitHub stores it, PR requests merging, conflict means Git needs human decision.”
+
+
